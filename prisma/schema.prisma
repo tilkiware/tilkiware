@@ -1,0 +1,49 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Hashlenmiş şifre
+  name      String?
+  createdAt DateTime @default(now())
+}
+
+model ShopifyApp {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String
+  category    String
+  rating      Float    @default(5.0)
+  reviewCount Int      @default(0)
+  logoUrl     String   // Base64 veya URL
+  installUrl  String
+  features    String   // SQLite dizi/array desteklemediği için JSON String olarak saklayacağız
+  pricing     String
+  createdAt   DateTime @default(now())
+}
+
+model AppSettings {
+  id             String          @id @default("settings")
+  featuredCount  Int             @default(3)
+  socialTwitter  String?
+  socialGithub   String?
+  socialLinkedin String?
+  socialGlobe    String?
+  slideshow      SlideshowItem[]
+}
+
+model SlideshowItem {
+  id         String      @id @default(uuid())
+  imageUrl   String
+  appSlug    String
+  settingsId String
+  settings   AppSettings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+}
