@@ -104,7 +104,63 @@ export const translations = {
     "detail.lorem2": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     
     // App Card
-    "card.viewDetails": "View Details"
+    "card.viewDetails": "View Details",
+
+    // Footer Newsletter
+    "footer.newsletter.title": "Newsletter",
+    "footer.newsletter.success": "Subscribed!",
+    "footer.newsletter.desc": "Get updates on new Shopify apps and features.",
+    "footer.newsletter.placeholder": "your email address...",
+    "footer.newsletter.btn": "Join",
+
+    // About Page
+    "about.badge": "About Us",
+    "about.title": "Crafting Premium Shopify Experiences",
+    "about.description": "TilkiWare is a team of passionate developers building high-performance Shopify applications that help merchants grow their businesses.",
+    "about.mission.title": "Our Mission",
+    "about.mission.desc": "We believe every Shopify merchant deserves access to premium, performance-optimized tools. Our mission is to bridge the gap between complex e-commerce needs and simple, elegant solutions.",
+    "about.value1.title": "Performance First",
+    "about.value1.desc": "Every line of code is optimized for speed. Our apps never slow down your store.",
+    "about.value2.title": "Merchant Focused",
+    "about.value2.desc": "Built by merchants, for merchants. We understand your daily challenges.",
+    "about.value3.title": "Continuous Innovation",
+    "about.value3.desc": "We ship updates weekly, always staying ahead of the Shopify ecosystem.",
+    "about.value4.title": "Transparent & Reliable",
+    "about.value4.desc": "No hidden fees, no surprises. Clear pricing and honest communication.",
+    "about.stats.apps": "Apps Built",
+    "about.stats.merchants": "Active Merchants",
+    "about.stats.reviews": "5-Star Reviews",
+    "about.stats.uptime": "Uptime",
+
+    // Contact Page
+    "contact.badge": "Get In Touch",
+    "contact.title": "Let's Build Something Together",
+    "contact.description": "Have a question, feature request, or partnership idea? We'd love to hear from you.",
+    "contact.form.name": "Full Name",
+    "contact.form.email": "Email Address",
+    "contact.form.subject": "Subject",
+    "contact.form.message": "Message",
+    "contact.form.send": "Send Message",
+    "contact.form.success": "Message sent successfully! We'll get back to you within 24 hours.",
+    "contact.info.email.title": "Email Us",
+    "contact.info.email.value": "hello@tilkiware.com",
+    "contact.info.response.title": "Response Time",
+    "contact.info.response.value": "Within 24 hours",
+    "contact.info.support.title": "Technical Support",
+    "contact.info.support.value": "support@tilkiware.com",
+
+    // Admin Pages Management
+    "admin.pages.title": "Page Management",
+    "admin.pages.desc": "Manage About and Contact page content.",
+    "admin.pages.about.title": "About Page Content",
+    "admin.pages.about.heading": "Page Heading",
+    "admin.pages.about.desc": "Page Description",
+    "admin.pages.about.mission": "Mission Statement",
+    "admin.pages.contact.title": "Contact Page Content",
+    "admin.pages.contact.heading": "Page Heading",
+    "admin.pages.contact.email": "Contact Email",
+    "admin.pages.contact.support": "Support Email",
+    "admin.pages.saved": "Pages saved successfully!"
   },
   tr: {
     // Navbar & Layout
@@ -209,6 +265,62 @@ export const translations = {
     "detail.lorem2": "Müşteri memnuniyetini ve satış dönüşüm oranlarını artırmak için tasarlanan bu araçla, mağazanızın tüm potansiyelini açığa çıkarın. 7/24 destek ekibimiz her adımda size yardımcı olmaya hazırdır.",
     
     // App Card
-    "card.viewDetails": "Detayları Gör"
+    "card.viewDetails": "Detayları Gör",
+
+    // Footer Newsletter
+    "footer.newsletter.title": "Bülten",
+    "footer.newsletter.success": "Kayıt Başarılı!",
+    "footer.newsletter.desc": "Yeni uygulamalar ve güncellemelerden haberdar olun.",
+    "footer.newsletter.placeholder": "e-posta adresiniz...",
+    "footer.newsletter.btn": "Kayıt Ol",
+
+    // About Page
+    "about.badge": "Hakkımızda",
+    "about.title": "Premium Shopify Deneyimleri Yaratıyoruz",
+    "about.description": "TilkiWare, satıcıların işlerini büyütmelerine yardımcı olan yüksek performanslı Shopify uygulamaları geliştiren tutkulu bir geliştirici ekibidir.",
+    "about.mission.title": "Misyonumuz",
+    "about.mission.desc": "Her Shopify satıcısının premium, performans odaklı araçlara erişimi hak ettiğine inanıyoruz. Misyonumuz, karmaşık e-ticaret ihtiyaçları ile basit, zarif çözümler arasındaki boşluğu kapatmaktır.",
+    "about.value1.title": "Performans Öncelikli",
+    "about.value1.desc": "Her satır kod hız için optimize edilmiştir. Uygulamalarımız mağazanızı asla yavaşlatmaz.",
+    "about.value2.title": "Satıcı Odaklı",
+    "about.value2.desc": "Satıcılar tarafından, satıcılar için geliştirildi. Günlük zorluklarınızı anlıyoruz.",
+    "about.value3.title": "Sürekli Yenilik",
+    "about.value3.desc": "Haftalık güncellemeler yayınlıyoruz, Shopify ekosisteminin her zaman önünde kalıyoruz.",
+    "about.value4.title": "Şeffaf ve Güvenilir",
+    "about.value4.desc": "Gizli ücret yok, sürpriz yok. Net fiyatlandırma ve dürüst iletişim.",
+    "about.stats.apps": "Geliştirilen Uygulama",
+    "about.stats.merchants": "Aktif Satıcı",
+    "about.stats.reviews": "5 Yıldızlı Değerlendirme",
+    "about.stats.uptime": "Çalışma Süresi",
+
+    // Contact Page
+    "contact.badge": "İletişime Geçin",
+    "contact.title": "Birlikte Bir Şeyler İnşa Edelim",
+    "contact.description": "Bir sorunuz, özellik isteğiniz veya işbirliği fikriniz mi var? Sizden haber almak isteriz.",
+    "contact.form.name": "Ad Soyad",
+    "contact.form.email": "E-posta Adresi",
+    "contact.form.subject": "Konu",
+    "contact.form.message": "Mesaj",
+    "contact.form.send": "Mesaj Gönder",
+    "contact.form.success": "Mesajınız başarıyla gönderildi! 24 saat içinde size döneceğiz.",
+    "contact.info.email.title": "E-posta",
+    "contact.info.email.value": "hello@tilkiware.com",
+    "contact.info.response.title": "Yanıt Süresi",
+    "contact.info.response.value": "24 saat içinde",
+    "contact.info.support.title": "Teknik Destek",
+    "contact.info.support.value": "support@tilkiware.com",
+
+    // Admin Pages Management
+    "admin.pages.title": "Sayfa Yönetimi",
+    "admin.pages.desc": "Hakkımızda ve İletişim sayfa içeriklerini yönetin.",
+    "admin.pages.about.title": "Hakkımızda Sayfa İçeriği",
+    "admin.pages.about.heading": "Sayfa Başlığı",
+    "admin.pages.about.desc": "Sayfa Açıklaması",
+    "admin.pages.about.mission": "Misyon Açıklaması",
+    "admin.pages.contact.title": "İletişim Sayfa İçeriği",
+    "admin.pages.contact.heading": "Sayfa Başlığı",
+    "admin.pages.contact.email": "İletişim E-postası",
+    "admin.pages.contact.support": "Destek E-postası",
+    "admin.pages.saved": "Sayfalar başarıyla kaydedildi!"
   }
 };

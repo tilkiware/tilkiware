@@ -1,8 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { apps as initialApps } from "@/lib/data";
-import { ShopifyApp, AppSettings } from "@/lib/types";
+import { ShopifyApp, AppSettings, PageContent } from "@/lib/types";
 
 const defaultSettings: AppSettings = {
     featuredCount: 3,
@@ -24,6 +23,26 @@ const defaultSettings: AppSettings = {
     ]
 };
 
+const defaultAboutPage: PageContent = {
+    slug: "about",
+    titleTr: "Premium Shopify Deneyimleri Yaratıyoruz",
+    titleEn: "Crafting Premium Shopify Experiences",
+    descTr: "TilkiWare, satıcıların işlerini büyütmelerine yardımcı olan yüksek performanslı Shopify uygulamaları geliştiren tutkulu bir geliştirici ekibidir.",
+    descEn: "TilkiWare is a team of passionate developers building high-performance Shopify applications that help merchants grow their businesses.",
+    extraTr: "Her Shopify satıcısının premium, performans odaklı araçlara erişimi hak ettiğine inanıyoruz. Misyonumuz, karmaşık e-ticaret ihtiyaçları ile basit, zarif çözümler arasındaki boşluğu kapatmaktır.",
+    extraEn: "We believe every Shopify merchant deserves access to premium, performance-optimized tools. Our mission is to bridge the gap between complex e-commerce needs and simple, elegant solutions."
+};
+
+const defaultContactPage: PageContent = {
+    slug: "contact",
+    titleTr: "Birlikte Bir Şeyler İnşa Edelim",
+    titleEn: "Let's Build Something Together",
+    descTr: "Bir sorunuz, özellik isteğiniz veya işbirliği fikriniz mi var? Sizden haber almak isteriz.",
+    descEn: "Have a question, feature request, or partnership idea? We'd love to hear from you.",
+    extraTr: "support@tilkiware.com",
+    extraEn: "hello@tilkiware.com"
+};
+
 interface AppContextType {
     apps: ShopifyApp[];
     addApp: (app: ShopifyApp) => Promise<void>;
@@ -31,6 +50,9 @@ interface AppContextType {
     deleteApp: (id: string) => Promise<void>;
     settings: AppSettings;
     updateSettings: (settings: AppSettings) => Promise<void>;
+    aboutPage: PageContent;
+    contactPage: PageContent;
+    updatePage: (slug: string, pageData: PageContent) => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -38,6 +60,8 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export function AppProvider({ children }: { children: React.ReactNode }) {
     const [apps, setApps] = useState<ShopifyApp[]>([]);
     const [settings, setSettings] = useState<AppSettings>(defaultSettings);
+    const [aboutPage, setAboutPage] = useState<PageContent>(defaultAboutPage);
+    const [contactPage, setContactPage] = useState<PageContent>(defaultContactPage);
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -53,6 +77,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 if (settingsRes.ok) {
                     const settingsData = await settingsRes.json();
                     setSettings(settingsData);
+                }
+
+                const pagesRes = await fetch("/api/pages");
+                if (pagesRes.ok) {
+                    const pagesData = await pagesRes.json();
+                    const about = pagesData.find((p: any) => p.slug === "about");
+                    const contact = pagesData.find((p: any) => p.slug === "contact");
+                    if (about) setAboutPage(about);
+                    if (contact) setContactPage(contact);
                 }
             } catch (error) {
                 console.error("Failed to load backend data:", error);
@@ -125,13 +158,40 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
+    const updatePage = async (slug: string, pageData: PageContent) => {
+        try {
+            const res = await fetch(`/api/pages/${slug}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(pageData),
+            });
+            if (res.ok) {
+                const savedPage = await res.json();
+                if (slug === "about") setAboutPage(savedPage);
+                if (slug === "contact") setContactPage(savedPage);
+            }
+        } catch (error) {
+            console.error(`Error updating page ${slug}:`, error);
+        }
+    };
+
     // Hydration mismatch prevention
     if (!isMounted) {
         return null;
     }
 
     return (
-        <AppContext.Provider value={{ apps, addApp, updateApp, deleteApp, settings, updateSettings }}>
+        <AppContext.Provider value={{ 
+            apps, 
+            addApp, 
+            updateApp, 
+            deleteApp, 
+            settings, 
+            updateSettings,
+            aboutPage,
+            contactPage,
+            updatePage
+        }}>
             {children}
         </AppContext.Provider>
     );

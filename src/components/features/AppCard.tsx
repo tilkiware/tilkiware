@@ -21,7 +21,6 @@ export function AppCard({ app }: AppCardProps) {
                     <div>
                         <div className="mb-4 flex items-start justify-between">
                             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-white/20 to-white/5 text-2xl shadow-inner overflow-hidden">
-                                {/* Placeholder for logo if image fails or mock */}
                                 {app.logoUrl ? (
                                     <img src={app.logoUrl} alt={app.name} className="h-full w-full object-cover" />
                                 ) : (
@@ -47,9 +46,12 @@ export function AppCard({ app }: AppCardProps) {
                         </p>
                     </div>
 
-                    <div className="flex items-center justify-between mt-auto">
-                        <Button variant="outline" className="w-full border-white/10 bg-transparent text-white group-hover:border-brand/40 group-hover:bg-brand/10 group-hover:text-brand transition-all">
-                            {t("card.viewDetails")} <ArrowRight className="ml-2 h-4 w-4" />
+                    <div className="flex items-center justify-between mt-auto gap-4 pt-4 border-t border-white/5">
+                        <span className="text-xs font-bold text-white/60 bg-white/5 border border-white/10 px-2.5 py-1 rounded-lg">
+                            {app.pricing || t("detail.free")}
+                        </span>
+                        <Button variant="ghost" size="sm" className="text-white/60 group-hover:text-brand transition-all p-0 hover:bg-transparent flex items-center gap-1 font-semibold text-xs cursor-pointer">
+                            {t("card.viewDetails")} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                         </Button>
                     </div>
                 </CardContent>

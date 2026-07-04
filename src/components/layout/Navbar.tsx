@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export function Navbar() {
@@ -13,6 +13,7 @@ export function Navbar() {
     
     const [scrollProgress, setScrollProgress] = useState(0);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -24,12 +25,25 @@ export function Navbar() {
         };
 
         window.addEventListener("scroll", handleScroll);
-        // Run once on mount
         handleScroll();
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    // Check if the current nav item is active
+    // Close mobile menu on route change
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [pathname]);
+
+    // Prevent body scroll when mobile menu is open
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => { document.body.style.overflow = ""; };
+    }, [isMobileMenuOpen]);
+
     const isActive = (path: string) => {
         if (path === "/") {
             return pathname === "/";
@@ -37,95 +51,158 @@ export function Navbar() {
         return pathname.startsWith(path);
     };
 
+    const navItems = [
+        { name: t("nav.home"), path: "/" },
+        { name: t("nav.apps"), path: "/apps" },
+        { name: t("nav.about"), path: "/about" },
+        { name: t("nav.contact"), path: "/contact" }
+    ];
+
     return (
-        <header 
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                isScrolled 
-                    ? "border-b border-brand/10 bg-[#090807]/90 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.4)] shadow-brand/[0.01]" 
-                    : "border-b border-white/5 bg-black/40 backdrop-blur-xl"
-            }`}
-        >
-            {/* Top Scroll Progress Indicator */}
-            <div 
-                className="absolute top-0 left-0 h-[2px] bg-fox-gradient shadow-[0_0_10px_#ff5a1f] transition-all duration-75 pointer-events-none" 
-                style={{ width: `${scrollProgress}%` }}
-            />
+        <>
+            <header 
+                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+                    isScrolled 
+                        ? "border-b border-brand/10 bg-[#090807]/90 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.4)] shadow-brand/[0.01]" 
+                        : "border-b border-white/5 bg-black/40 backdrop-blur-xl"
+                }`}
+            >
+                {/* Top Scroll Progress Indicator */}
+                <div 
+                    className="absolute top-0 left-0 h-[2px] bg-fox-gradient shadow-[0_0_10px_#ff5a1f] transition-all duration-75 pointer-events-none" 
+                    style={{ width: `${scrollProgress}%` }}
+                />
 
-            <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-                <Link href="/" className="flex items-center gap-2.5 group">
-                    <div className="flex h-9.5 w-9.5 items-center justify-center rounded-xl bg-white/[0.03] border border-white/10 group-hover:border-brand/40 group-hover:bg-brand/10 group-hover:rotate-6 transition-all duration-300 p-1.5 shadow-md">
-                        <img src="/logo.png" alt="TilkiWare Logo" className="h-full w-full object-contain" />
-                    </div>
-                    <span className="text-lg font-bold tracking-tight text-white transition-colors duration-300">
-                        <span className="text-brand group-hover:text-[#ff9f1c] transition-colors">Tilki</span>Ware
-                    </span>
-                </Link>
+                <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+                    <Link href="/" className="flex items-center gap-2.5 group">
+                        <div className="flex h-9.5 w-9.5 items-center justify-center rounded-xl bg-white/[0.03] border border-white/10 group-hover:border-brand/40 group-hover:bg-brand/10 group-hover:rotate-6 transition-all duration-300 p-1.5 shadow-md">
+                            <img src="/logo.png" alt="TilkiWare Logo" className="h-full w-full object-contain" />
+                        </div>
+                        <span className="text-lg font-bold tracking-tight text-white transition-colors duration-300">
+                            <span className="text-brand group-hover:text-[#ff9f1c] transition-colors">Tilki</span>Ware
+                        </span>
+                    </Link>
 
-                <nav className="hidden md:flex items-center gap-8">
-                    {[
-                        { name: t("nav.home"), path: "/" },
-                        { name: t("nav.apps"), path: "/apps" },
-                        { name: t("nav.about"), path: "/about" },
-                        { name: t("nav.contact"), path: "/contact" }
-                    ].map((item) => {
-                        const active = isActive(item.path);
-                        return (
-                            <Link 
-                                key={item.path} 
-                                href={item.path} 
-                                className={`text-sm font-semibold transition-all duration-300 relative py-1 flex flex-col items-center ${
-                                    active 
-                                        ? "text-brand" 
-                                        : "text-white/60 hover:text-white"
+                    {/* Desktop Navigation */}
+                    <nav className="hidden md:flex items-center gap-8">
+                        {navItems.map((item) => {
+                            const active = isActive(item.path);
+                            return (
+                                <Link 
+                                    key={item.path} 
+                                    href={item.path} 
+                                    className={`text-sm font-semibold transition-all duration-300 relative py-1 flex flex-col items-center ${
+                                        active 
+                                            ? "text-brand" 
+                                            : "text-white/60 hover:text-white"
+                                    }`}
+                                >
+                                    <span>{item.name}</span>
+                                    <span className={`absolute bottom-[-6px] h-1.5 w-1.5 rounded-full bg-brand shadow-[0_0_8px_#ff5a1f] transition-all duration-300 ${
+                                        active ? "opacity-100 scale-100" : "opacity-0 scale-50"
+                                    }`} />
+                                </Link>
+                            );
+                        })}
+                    </nav>
+
+                    <div className="flex items-center gap-3 md:gap-4">
+                        {/* Language Selector */}
+                        <div className="flex items-center rounded-full bg-white/[0.04] p-0.5 border border-white/10 shadow-inner">
+                            <button
+                                onClick={() => setLanguage("tr")}
+                                className={`px-3 md:px-3.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider transition-all duration-300 cursor-pointer ${
+                                    language === "tr"
+                                        ? "bg-brand text-white shadow-[0_0_10px_rgba(255,90,31,0.4)]"
+                                        : "text-white/40 hover:text-white/80"
                                 }`}
                             >
-                                <span>{item.name}</span>
-                                <span className={`absolute bottom-[-6px] h-1.5 w-1.5 rounded-full bg-brand shadow-[0_0_8px_#ff5a1f] transition-all duration-300 ${
-                                    active ? "opacity-100 scale-100" : "opacity-0 scale-50"
-                                }`} />
-                            </Link>
-                        );
-                    })}
-                </nav>
+                                TR
+                            </button>
+                            <button
+                                onClick={() => setLanguage("en")}
+                                className={`px-3 md:px-3.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider transition-all duration-300 cursor-pointer ${
+                                    language === "en"
+                                        ? "bg-brand text-white shadow-[0_0_10px_rgba(255,90,31,0.4)]"
+                                        : "text-white/40 hover:text-white/80"
+                                }`}
+                            >
+                                EN
+                            </button>
+                        </div>
 
-                <div className="flex items-center gap-4">
-                    {/* Premium Capsule Language Selector */}
-                    <div className="flex items-center rounded-full bg-white/[0.04] p-0.5 border border-white/10 shadow-inner">
+                        {/* Desktop-only buttons */}
+                        <Link href="/admin/dashboard">
+                            <Button variant="ghost" size="sm" className="hidden md:flex text-white/70 hover:text-brand hover:bg-white/5 transition-all">
+                                {t("nav.adminLogin")}
+                            </Button>
+                        </Link>
+                        <Button variant="glass" size="sm" className="hidden md:flex hover:border-brand/40 hover:bg-brand/10 hover:text-brand hover:shadow-[0_0_15px_rgba(255,90,31,0.15)] transition-all duration-300">
+                            {t("nav.getStarted")}
+                        </Button>
+
+                        {/* Mobile Hamburger Button */}
                         <button
-                            onClick={() => setLanguage("tr")}
-                            className={`px-3.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider transition-all duration-300 cursor-pointer ${
-                                language === "tr"
-                                    ? "bg-brand text-white shadow-[0_0_10px_rgba(255,90,31,0.4)]"
-                                    : "text-white/40 hover:text-white/80"
-                            }`}
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            className="md:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/70 hover:text-brand hover:border-brand/40 transition-all cursor-pointer"
                         >
-                            TR
-                        </button>
-                        <button
-                            onClick={() => setLanguage("en")}
-                            className={`px-3.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider transition-all duration-300 cursor-pointer ${
-                                language === "en"
-                                    ? "bg-brand text-white shadow-[0_0_10px_rgba(255,90,31,0.4)]"
-                                    : "text-white/40 hover:text-white/80"
-                            }`}
-                        >
-                            EN
+                            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                         </button>
                     </div>
-
-                    <Link href="/admin/dashboard">
-                        <Button variant="ghost" size="sm" className="hidden md:flex text-white/70 hover:text-brand hover:bg-white/5 transition-all">
-                            {t("nav.adminLogin")}
-                        </Button>
-                    </Link>
-                    <Button variant="glass" size="sm" className="hidden md:flex hover:border-brand/40 hover:bg-brand/10 hover:text-brand hover:shadow-[0_0_15px_rgba(255,90,31,0.15)] transition-all duration-300">
-                        {t("nav.getStarted")}
-                    </Button>
-                    <Button variant="ghost" size="icon" className="md:hidden text-white/70 hover:text-brand">
-                        <Menu className="h-5 w-5" />
-                    </Button>
                 </div>
-            </div>
-        </header>
+            </header>
+
+            {/* Mobile Menu Overlay */}
+            {isMobileMenuOpen && (
+                <div className="fixed inset-0 z-40 md:hidden">
+                    {/* Backdrop */}
+                    <div 
+                        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    />
+                    
+                    {/* Panel */}
+                    <div className="absolute top-16 left-0 right-0 bg-[#0c0a09]/98 backdrop-blur-2xl border-b border-white/10 shadow-2xl p-6 space-y-6 animate-fade-in max-h-[calc(100vh-4rem)] overflow-y-auto">
+                        {/* Navigation Links */}
+                        <nav className="flex flex-col gap-1">
+                            {navItems.map((item) => {
+                                const active = isActive(item.path);
+                                return (
+                                    <Link
+                                        key={item.path}
+                                        href={item.path}
+                                        className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-semibold transition-all duration-200 ${
+                                            active
+                                                ? "bg-brand/10 text-brand border border-brand/20"
+                                                : "text-white/70 hover:bg-white/5 hover:text-white border border-transparent"
+                                        }`}
+                                    >
+                                        {active && (
+                                            <span className="h-2 w-2 rounded-full bg-brand shadow-[0_0_8px_#ff5a1f] shrink-0" />
+                                        )}
+                                        {item.name}
+                                    </Link>
+                                );
+                            })}
+                        </nav>
+
+                        {/* Divider */}
+                        <div className="border-t border-white/5" />
+
+                        {/* Action Buttons */}
+                        <div className="flex flex-col gap-3">
+                            <Link href="/admin/dashboard">
+                                <Button variant="outline" className="w-full border-white/10 text-white/70 hover:border-brand/40 hover:text-brand h-11 font-semibold">
+                                    {t("nav.adminLogin")}
+                                </Button>
+                            </Link>
+                            <Button className="w-full h-11 bg-fox-gradient hover:opacity-90 shadow-[0_0_20px_rgba(255,90,31,0.2)] font-bold">
+                                {t("nav.getStarted")}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 }

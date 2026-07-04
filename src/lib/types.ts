@@ -31,3 +31,13 @@ export interface AppSettings {
         appSlug: string;
     }[];
 }
+
+export interface PageContent {
+    slug: string;
+    titleTr: string;
+    titleEn: string;
+    descTr: string;
+    descEn: string;
+    extraTr?: string | null;
+    extraEn?: string | null;
+}

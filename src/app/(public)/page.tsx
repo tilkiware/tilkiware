@@ -210,12 +210,12 @@ export default function Home() {
 
         {/* Dynamic Slideshow Section */}
         {settings.slideshow && settings.slideshow.length > 0 && (
-          <div className="space-y-6 pt-12 border-t border-white/5">
-            <div className="flex flex-col gap-1">
-              <h3 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-brand" /> {t("showcase.title")}
-              </h3>
-              <p className="text-white/50 text-xs">{t("showcase.description")}</p>
+          <div className="space-y-8 pt-16 border-t border-white/5">
+            <div className="flex flex-col gap-2">
+              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl flex items-center gap-2.5">
+                <Sparkles className="h-6 w-6 text-brand" /> {t("showcase.title")}
+              </h2>
+              <p className="text-white/50 text-sm leading-relaxed">{t("showcase.description")}</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">

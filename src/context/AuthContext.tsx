@@ -4,11 +4,13 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface User {
     email: string;
+    name?: string | null;
 }
 
 interface AuthContextType {
     user: User | null;
     isAuthenticated: boolean;
+    isLoading: boolean;
     login: (email: string, password: string) => Promise<boolean>;
     logout: () => void;
 }
@@ -18,17 +20,28 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [isMounted, setIsMounted] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
+    // On mount, verify session via server-side cookie check
     useEffect(() => {
-        // Load auth status from localStorage on mount
-        const savedAuth = localStorage.getItem("tilkiware-auth");
-        const savedUserEmail = localStorage.getItem("tilkiware-user-email");
-        if (savedAuth === "true" && savedUserEmail) {
-            setUser({ email: savedUserEmail });
-            setIsAuthenticated(true);
-        }
-        setIsMounted(true);
+        const verifySession = async () => {
+            try {
+                const res = await fetch("/api/auth/me");
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.authenticated) {
+                        setUser({ email: data.user.email, name: data.user.name });
+                        setIsAuthenticated(true);
+                    }
+                }
+            } catch (error) {
+                console.error("Session verification failed:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        verifySession();
     }, []);
 
     const login = async (email: string, password: string): Promise<boolean> => {
@@ -42,10 +55,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             if (res.ok) {
                 const data = await res.json();
                 if (data.success) {
-                    setUser({ email: data.user.email });
+                    setUser({ email: data.user.email, name: data.user.name });
                     setIsAuthenticated(true);
-                    localStorage.setItem("tilkiware-auth", "true");
-                    localStorage.setItem("tilkiware-user-email", data.user.email);
                     return true;
                 }
             }
@@ -56,20 +67,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return false;
     };
 
-    const logout = () => {
+    const logout = async () => {
+        try {
+            await fetch("/api/auth/logout", { method: "POST" });
+        } catch (error) {
+            console.error("Logout API request failed:", error);
+        }
         setUser(null);
         setIsAuthenticated(false);
-        localStorage.removeItem("tilkiware-auth");
-        localStorage.removeItem("tilkiware-user-email");
     };
 
-    // Avoid hydration issues
-    if (!isMounted) {
-        return null;
-    }
-
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, isLoading, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

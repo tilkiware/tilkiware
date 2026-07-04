@@ -1,6 +1,6 @@
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -46,4 +46,14 @@ model SlideshowItem {
   appSlug    String
   settingsId String
   settings   AppSettings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+}
+
+model PageContent {
+  slug      String @id // "about" or "contact"
+  titleTr   String
+  titleEn   String
+  descTr    String
+  descEn    String
+  extraTr   String? // e.g., Mission text for About, Support Email for Contact
+  extraEn   String?
 }

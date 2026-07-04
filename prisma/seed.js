@@ -86,6 +86,7 @@ async function main() {
     await prisma.slideshowItem.deleteMany({});
     await prisma.appSettings.deleteMany({});
     await prisma.shopifyApp.deleteMany({});
+    await prisma.pageContent.deleteMany({});
 
     // 2. Create Admin user
     const salt = await bcrypt.genSalt(10);
@@ -131,6 +132,31 @@ async function main() {
         }
     });
     console.log("Default application settings and slideshow slides seeded.");
+
+    // 5. Create Page Contents
+    await prisma.pageContent.create({
+        data: {
+            slug: "about",
+            titleTr: "Premium Shopify Deneyimleri Yaratıyoruz",
+            titleEn: "Crafting Premium Shopify Experiences",
+            descTr: "TilkiWare, satıcıların işlerini büyütmelerine yardımcı olan yüksek performanslı Shopify uygulamaları geliştiren tutkulu bir geliştirici ekibidir.",
+            descEn: "TilkiWare is a team of passionate developers building high-performance Shopify applications that help merchants grow their businesses.",
+            extraTr: "Her Shopify satıcısının premium, performans odaklı araçlara erişimi hak ettiğine inanıyoruz. Misyonumuz, karmaşık e-ticaret ihtiyaçları ile basit, zarif çözümler arasındaki boşluğu kapatmaktır.",
+            extraEn: "We believe every Shopify merchant deserves access to premium, performance-optimized tools. Our mission is to bridge the gap between complex e-commerce needs and simple, elegant solutions."
+        }
+    });
+    await prisma.pageContent.create({
+        data: {
+            slug: "contact",
+            titleTr: "Birlikte Bir Şeyler İnşa Edelim",
+            titleEn: "Let's Build Something Together",
+            descTr: "Bir sorunuz, özellik isteğiniz veya işbirliği fikriniz mi var? Sizden haber almak isteriz.",
+            descEn: "Have a question, feature request, or partnership idea? We'd love to hear from you.",
+            extraTr: "support@tilkiware.com",
+            extraEn: "hello@tilkiware.com"
+        }
+    });
+    console.log("About and Contact pages content seeded.");
 
     console.log("Seeding completed successfully!");
 }

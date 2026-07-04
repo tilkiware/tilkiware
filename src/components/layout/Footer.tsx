@@ -9,7 +9,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useApp } from "@/context/AppContext";
 
 export function Footer() {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const { settings } = useApp();
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
@@ -113,25 +113,25 @@ export function Footer() {
 
                     {/* Newsletter Subscription column */}
                     <div className="flex flex-col gap-4">
-                        <h3 className="text-xs font-semibold text-white tracking-wider uppercase">Bülten / Newsletter</h3>
+                        <h3 className="text-xs font-semibold text-white tracking-wider uppercase">{t("footer.newsletter.title")}</h3>
                         
                         {isSubscribed ? (
                             <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-4 text-center space-y-2 flex flex-col items-center justify-center h-28 animate-pulse">
                                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500/20 text-green-400 text-sm font-bold">✓</span>
                                 <span className="text-xs font-bold text-green-400">
-                                    {t("tr") === "tr" ? "Kayıt Başarılı!" : "Subscribed!"}
+                                    {t("footer.newsletter.success")}
                                 </span>
                             </div>
                         ) : (
                             <>
                                 <p className="text-xs text-white/50 leading-relaxed">
-                                    {t("tr") === "tr" ? "Yeni uygulamalar ve güncellemelerden haberdar olun." : "Get updates on new Shopify apps and features."}
+                                    {t("footer.newsletter.desc")}
                                 </p>
                                 <form onSubmit={handleSubscribe} className="flex gap-2 mt-1">
                                     <Input 
                                         type="email" 
                                         required
-                                        placeholder="e-posta adresi / email..." 
+                                        placeholder={t("footer.newsletter.placeholder")} 
                                         className="bg-black/40 border-white/10 focus:border-brand/40 focus:ring-brand/40 text-xs h-9.5 text-white" 
                                     />
                                     <Button 
@@ -139,7 +139,7 @@ export function Footer() {
                                         size="sm" 
                                         className="bg-fox-gradient hover:opacity-90 text-xs px-3 font-semibold h-9.5 cursor-pointer shrink-0"
                                     >
-                                        {t("tr") === "tr" ? "Kayıt Ol" : "Join"}
+                                        {t("footer.newsletter.btn")}
                                     </Button>
                                 </form>
                             </>
